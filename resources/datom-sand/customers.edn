@@ -1,0 +1,23 @@
+[{:db/id #db/id [:db.part/user]
+  :customer/name "Brilliant Dragon"
+  :customer/pref :customer.pref/Shimane}
+ {:db/id #db/id [:db.part/user -1]
+  :customer/name "deep125.river"
+  :customer/pref :customer.pref/Hiroshima}
+ {:db/id #db/id [:db.part/user -2]
+  :customer/name "とるた"
+  :customer/pref :customer.pref/Yamaguchi
+  :customer/invited-by #db/id [:db.part/user -1]}
+ {:db/id #db/id [:db.part/user -3]
+  :customer/name "Amazon Customer"
+  :customer/pref :customer.pref/Okayama
+  :customer/invited-by #db/id [:db.part/user -2]}
+ {:db/id #db/id [:db.part/user]
+  :customer/name "owl_suzuki"
+  :customer/pref :customer.pref/Tottori
+  :customer/invited-by #db/id [:db.part/user -3]}
+ {:db/id #db/id [:db.part/user]
+  :customer/name "こん"
+  :customer/pref :customer.pref/Fukuoka
+  :customer/invited-by #db/id [:db.part/user -1]}
+ ]

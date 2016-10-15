@@ -1,0 +1,7 @@
+[{:db/id #db/id [:db.part/user]
+  :item/name "プログラミングClojure"}
+ {:db/id #db/id [:db.part/user]
+  :item/name "Real World Haskell"}
+ {:db/id #db/id [:db.part/user]
+  :item/name "Land of Lisp"}
+ ]

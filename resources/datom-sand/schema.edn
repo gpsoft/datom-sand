@@ -1,0 +1,75 @@
+;; For customer entity
+[{:db/id #db/id [:db.part/db]
+  :db/ident :customer/name
+  :db/doc "Name of a customer."
+  :db/valueType :db.type/string
+  :db/cardinality :db.cardinality/one
+  :db/unique :db.unique/identity
+  :db.install/_attribute :db.part/db}
+ {:db/id #db/id [:db.part/db]
+  :db/ident :customer/pref
+  :db/doc "Prefecture the customer lives in."
+  :db/valueType :db.type/ref
+  :db/cardinality :db.cardinality/one
+  :db.install/_attribute :db.part/db}
+ {:db/id #db/id [:db.part/db]
+  :db/ident :customer/invited-by
+  :db/doc "Who did invite the customer?"
+  :db/valueType :db.type/ref
+  :db/cardinality :db.cardinality/one
+  :db.install/_attribute :db.part/db}]
+
+;; For review entity
+[{:db/id #db/id [:db.part/db]
+  :db/ident :review/title
+  :db/doc "Title of a review."
+  :db/valueType :db.type/string
+  :db/cardinality :db.cardinality/one
+  :db.install/_attribute :db.part/db}
+ {:db/id #db/id [:db.part/db]
+  :db/ident :review/body
+  :db/doc "Body content of the review."
+  :db/valueType :db.type/string
+  :db/cardinality :db.cardinality/one
+  :db.install/_attribute :db.part/db}
+ {:db/id #db/id [:db.part/db]
+  :db/ident :review/num-stars
+  :db/doc "Num of stars."
+  :db/valueType :db.type/long
+  :db/cardinality :db.cardinality/one
+  :db.install/_attribute :db.part/db}
+ {:db/id #db/id [:db.part/db]
+  :db/ident :review/num-likes
+  :db/doc "Num of likes for the review."
+  :db/valueType :db.type/long
+  :db/cardinality :db.cardinality/one
+  :db.install/_attribute :db.part/db}
+ {:db/id #db/id [:db.part/db]
+  :db/ident :review/reviewer
+  :db/doc "The reviewer of the review."
+  :db/valueType :db.type/ref
+  :db/cardinality :db.cardinality/one
+  :db.install/_attribute :db.part/db}
+ {:db/id #db/id [:db.part/db]
+  :db/ident :review/item
+  :db/doc "What item is the review for?"
+  :db/valueType :db.type/ref
+  :db/cardinality :db.cardinality/one
+  :db.install/_attribute :db.part/db}]
+
+;; For item entity
+[{:db/id #db/id [:db.part/db]
+ :db/ident :item/name
+ :db/doc "Name of an item."
+ :db/valueType :db.type/string
+ :db/cardinality :db.cardinality/one
+  :db/unique :db.unique/identity
+ :db.install/_attribute :db.part/db}]
+
+;; Prefecture entities
+[:db/add #db/id[:db.part/user] :db/ident :customer.pref/Hiroshima]
+[:db/add #db/id[:db.part/user] :db/ident :customer.pref/Yamaguchi]
+[:db/add #db/id[:db.part/user] :db/ident :customer.pref/Shimane]
+[:db/add #db/id[:db.part/user] :db/ident :customer.pref/Okayama]
+[:db/add #db/id[:db.part/user] :db/ident :customer.pref/Tottori]
+[:db/add #db/id[:db.part/user] :db/ident :customer.pref/Fukuoka]
