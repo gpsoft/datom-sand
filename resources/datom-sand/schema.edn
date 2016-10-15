@@ -59,17 +59,17 @@
 
 ;; For item entity
 [{:db/id #db/id [:db.part/db]
- :db/ident :item/name
- :db/doc "Name of an item."
- :db/valueType :db.type/string
- :db/cardinality :db.cardinality/one
+  :db/ident :item/name
+  :db/doc "Name of an item."
+  :db/valueType :db.type/string
+  :db/cardinality :db.cardinality/one
   :db/unique :db.unique/identity
- :db.install/_attribute :db.part/db}]
+  :db.install/_attribute :db.part/db}]
 
 ;; Prefecture entities
-[:db/add #db/id[:db.part/user] :db/ident :customer.pref/Hiroshima]
-[:db/add #db/id[:db.part/user] :db/ident :customer.pref/Yamaguchi]
-[:db/add #db/id[:db.part/user] :db/ident :customer.pref/Shimane]
-[:db/add #db/id[:db.part/user] :db/ident :customer.pref/Okayama]
-[:db/add #db/id[:db.part/user] :db/ident :customer.pref/Tottori]
-[:db/add #db/id[:db.part/user] :db/ident :customer.pref/Fukuoka]
+[[:db/add #db/id[:db.part/user] :db/ident :customer.pref/Hiroshima]
+ [:db/add #db/id[:db.part/user] :db/ident :customer.pref/Yamaguchi]
+ [:db/add #db/id[:db.part/user] :db/ident :customer.pref/Shimane]
+ [:db/add #db/id[:db.part/user] :db/ident :customer.pref/Okayama]
+ [:db/add #db/id[:db.part/user] :db/ident :customer.pref/Tottori]
+ [:db/add #db/id[:db.part/user] :db/ident :customer.pref/Fukuoka]]
