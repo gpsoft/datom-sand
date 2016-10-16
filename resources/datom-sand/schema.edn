@@ -4,7 +4,7 @@
   :db/doc "Name of a customer."
   :db/valueType :db.type/string
   :db/cardinality :db.cardinality/one
-  :db/unique :db.unique/identity
+  :db/unique :db.unique/value
   :db.install/_attribute :db.part/db}
  {:db/id #db/id [:db.part/db]
   :db/ident :customer/pref
@@ -63,7 +63,7 @@
   :db/doc "Name of an item."
   :db/valueType :db.type/string
   :db/cardinality :db.cardinality/one
-  :db/unique :db.unique/identity
+  :db/unique :db.unique/value
   :db.install/_attribute :db.part/db}]
 
 ;; Prefecture entities

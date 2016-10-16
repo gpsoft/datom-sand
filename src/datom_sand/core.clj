@@ -25,6 +25,18 @@
          [_ :item/name ?n]]
        db))
 
+(defn add-customer
+  ([conn n pref]
+   (add-customer conn n pref nil))
+  ([conn n pref invitor-name]
+   (let [tx-data {:db/id #db/id [:db.part/db]
+                  :customer/name n
+                  :customer/pref pref}]
+     @(d/transact conn
+                  [(if invitor-name
+                    (assoc tx-data :customer/invited-by [:customer/name invitor-name])
+                    tx-data)]))))
+
 (defn find-idents-in-set
   "すべての別名を見つける。"
   [db]

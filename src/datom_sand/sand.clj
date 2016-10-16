@@ -25,9 +25,11 @@
   )
 
 (comment
-  (c/all-customers db)
-  (c/all-invitations db)
-  (c/all-items db)
+  (c/all-customers (d/db conn))
+  (c/all-invitations (d/db conn))
+  (c/all-items (d/db conn))
+  (c/add-customer conn "Hoge" :customer.pref/Fukuoka)
+  (c/add-customer conn "Fuga" :customer.pref/Hiroshima "Hoge")
   )
 
 (comment
