@@ -1,20 +1,26 @@
 ;; For customer entity
 [{:db/id #db/id [:db.part/db]
   :db/ident :customer/name
-  :db/doc "Name of a customer."
+  :db/doc "カスタマーの名前"
   :db/valueType :db.type/string
   :db/cardinality :db.cardinality/one
   :db/unique :db.unique/value
   :db.install/_attribute :db.part/db}
  {:db/id #db/id [:db.part/db]
+  :db/ident :customer/likes
+  :db/doc "カスタマーが好きなもの(レビューやコメントへの参照)"
+  :db/valueType :db.type/ref
+  :db/cardinality :db.cardinality/many
+  :db.install/_attribute :db.part/db}
+ {:db/id #db/id [:db.part/db]
   :db/ident :customer/pref
-  :db/doc "Prefecture the customer lives in."
+  :db/doc "カスタマーが、どこに住んでるか(都道府県)"
   :db/valueType :db.type/ref
   :db/cardinality :db.cardinality/one
   :db.install/_attribute :db.part/db}
  {:db/id #db/id [:db.part/db]
   :db/ident :customer/invited-by
-  :db/doc "Who did invite the customer?"
+  :db/doc "カスタマーが、誰に紹介されたか"
   :db/valueType :db.type/ref
   :db/cardinality :db.cardinality/one
   :db.install/_attribute :db.part/db}]
@@ -22,48 +28,68 @@
 ;; For review entity
 [{:db/id #db/id [:db.part/db]
   :db/ident :review/title
-  :db/doc "Title of a review."
+  :db/doc "レビューのタイトル"
   :db/valueType :db.type/string
   :db/cardinality :db.cardinality/one
   :db.install/_attribute :db.part/db}
  {:db/id #db/id [:db.part/db]
   :db/ident :review/body
-  :db/doc "Body content of the review."
+  :db/doc "レビューの本文"
   :db/valueType :db.type/string
   :db/cardinality :db.cardinality/one
   :db.install/_attribute :db.part/db}
  {:db/id #db/id [:db.part/db]
   :db/ident :review/num-stars
-  :db/doc "Num of stars."
-  :db/valueType :db.type/long
-  :db/cardinality :db.cardinality/one
-  :db.install/_attribute :db.part/db}
- {:db/id #db/id [:db.part/db]
-  :db/ident :review/num-likes
-  :db/doc "Num of likes for the review."
+  :db/doc "レビューの星の数"
   :db/valueType :db.type/long
   :db/cardinality :db.cardinality/one
   :db.install/_attribute :db.part/db}
  {:db/id #db/id [:db.part/db]
   :db/ident :review/reviewer
-  :db/doc "The reviewer of the review."
-  :db/valueType :db.type/ref
-  :db/cardinality :db.cardinality/one
-  :db.install/_attribute :db.part/db}
- {:db/id #db/id [:db.part/db]
-  :db/ident :review/item
-  :db/doc "What item is the review for?"
+  :db/doc "レビューしたカスタマー"
   :db/valueType :db.type/ref
   :db/cardinality :db.cardinality/one
   :db.install/_attribute :db.part/db}]
 
-;; For item entity
+;; For book entity
 [{:db/id #db/id [:db.part/db]
-  :db/ident :item/name
-  :db/doc "Name of an item."
+  :db/ident :book/title
+  :db/doc "書籍のタイトル"
   :db/valueType :db.type/string
   :db/cardinality :db.cardinality/one
-  :db/unique :db.unique/value
+  :db/unique :db.unique/identity
+  :db.install/_attribute :db.part/db}
+ {:db/id #db/id [:db.part/db]
+  :db/ident :book/price
+  :db/doc "書籍の価格(税込み・円)"
+  :db/valueType :db.type/long
+  :db/cardinality :db.cardinality/one
+  :db.install/_attribute :db.part/db}
+ {:db/id #db/id [:db.part/db]
+  :db/ident :book/reviews
+  :db/doc "書籍のレビュー"
+  :db/valueType :db.type/ref
+  :db/cardinality :db.cardinality/many
+  :db.install/_attribute :db.part/db}]
+
+;; For comment entity
+[{:db/id #db/id [:db.part/db]
+ :db/ident :comment/commentor
+ :db/doc "コメントしたカスタマー"
+ :db/valueType :db.type/ref
+ :db/cardinality :db.cardinality/one
+ :db.install/_attribute :db.part/db}
+ {:db/id #db/id [:db.part/db]
+  :db/ident :comment/body
+  :db/doc "コメントの本文"
+  :db/valueType :db.type/string
+  :db/cardinality :db.cardinality/one
+  :db.install/_attribute :db.part/db}
+ {:db/id #db/id [:db.part/db]
+  :db/ident :comments
+  :db/doc "コメント(レビューやコメントなど、コメント対象に付ける属性)"
+  :db/valueType :db.type/
+  :db/cardinality :db.cardinality/many
   :db.install/_attribute :db.part/db}]
 
 ;; Prefecture entities

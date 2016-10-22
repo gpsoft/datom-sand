@@ -1,14 +1,5 @@
-# datom-sand
+# Datom-sand
 
-A Clojure library designed to ... well, that part is up to you.
+新感覚データベース**"Datomic"**の練習とチュートリアル的なもの。
 
-## Usage
-
-FIXME
-
-## License
-
-Copyright © 2016 FIXME
-
-Distributed under the Eclipse Public License either version 1.0 or (at
-your option) any later version.
+[読む](https://gpsoft.github.io/datom-sand)

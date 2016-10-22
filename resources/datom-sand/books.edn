@@ -1,0 +1,16 @@
+[{:db/id #db/id [:db.part/user]
+  :book/title "プログラミングClojure"
+  :book/price 3672}
+ {:db/id #db/id [:db.part/user]
+  :book/title "Real World Haskell"
+  :book/price 4014}
+ {:db/id #db/id [:db.part/user]
+  :book/title "Land of Lisp"
+  :book/price 4104}
+ {:db/id #db/id [:db.part/user]
+  :book/title "On Lisp"
+  :book/price 4104}
+ {:db/id #db/id [:db.part/user]
+  :book/title "すごいHaskellたのしく学ぼう!"
+  :book/price 3024}
+ ]
