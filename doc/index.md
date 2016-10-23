@@ -4,16 +4,16 @@
 
 ## もくじ
 
-- [1.イントロ・外観](1-intro.md)
-- [2.基本](2-basics.md)
-- [3.エンティティとトランザクション](3-entity-and-tx.md)
-- [4.属性とスキーマ](4-attr-and-schema.md)
-- [5.クエリー](5-query.md)
-- [6.Pull](6-pull.md)
-- [7.Rule](7-rule.md)
-- [8.Database function](8-db-fn.md)
-- [8.履歴](8-history.md)
-- [9.スキーマの変更](9-alter-schema.md)
+- [1. イントロ・概要](1-intro.md)
+- [2. 基本](2-basics.md)
+- [3. エンティティとトランザクション](3-entity-and-tx.md)
+- [4. 属性とスキーマ](4-attr-and-schema.md)
+- [5. クエリー](5-query.md)
+- [6. Pull](6-pull.md)
+- [7. Rule](7-rule.md)
+- [8. Database function](8-db-fn.md)
+- [8. 履歴](8-history.md)
+- [9. スキーマの変更](9-alter-schema.md)
 
 ## サンプルデータ
 
