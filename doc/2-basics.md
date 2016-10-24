@@ -69,7 +69,7 @@
 
     (d/transact
       conn
-      [[:db/add                       ;; 事実の表明:
+      [[:db/add                       ;; factの表明:
         #db/id [:db.part/user]        ;;   新規エンティティの、
         :db/doc "Hello, world!"]])    ;;   :db/doc属性の値は"Hello, world!"である。
 

@@ -4,7 +4,7 @@
 
 ## もくじ
 
-- [1. イントロ・概要](1-intro.md)
+- [1. イントロ・概観](1-intro.md)
 - [2. 基本](2-basics.md)
 - [3. エンティティとトランザクション](3-entity-and-tx.md)
 - [4. 属性とスキーマ](4-attr-and-schema.md)
