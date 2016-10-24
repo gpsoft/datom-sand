@@ -91,13 +91,11 @@
   - `SELECT eid, txid FROM entities WHERE db_doc='Hello, world!';`に近いイメージ
   - ここでは`#{}`を返す ...なぜなら`db1`はTx実行前のDBスナップショットだから
 
+        (d/q
+          '[:find ?e ?tx
+            :where
+            [?e :db/doc "Hello, world!" ?tx]]
+          (d/db conn))
 
-
-    (d/q
-      '[:find ?e ?tx
-        :where
-        [?e :db/doc "Hello, world!" ?tx]]
-      (d/db conn))
-
-  - 最新のDBスナップショットに対してクエリーすれば、`#{[17592186045417 13194139534312]}`など、該当するDatomのエンティティIDとトランザクションIDが返る
+    - 最新のDBスナップショットに対してクエリーすれば、`#{[17592186045417 13194139534312]}`など、該当するDatomのエンティティIDとトランザクションIDが返る
 
