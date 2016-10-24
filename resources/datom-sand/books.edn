@@ -12,5 +12,4 @@
   :book/price 4104}
  {:db/id #db/id [:db.part/user]
   :book/title "すごいHaskellたのしく学ぼう!"
-  :book/price 3024}
- ]
+  :book/price 3024}]

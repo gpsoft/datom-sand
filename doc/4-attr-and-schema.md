@@ -160,7 +160,9 @@
         :book/title "プログラミングClojure"
         :book/price 3200}]
 
-  - `:book/title`は`:db.unique/identity`なので、仮エンティティIDは32に解決される(つまり、既存エンティティのUPDATEに相当)
+  - `:book/title`は`:db.unique/identity`なので、仮エンティティIDは63に解決される
+    - つまりこのトランザクションは、既存エンティティの`:book/price`を変更することに相当する
+    - 古いDatom(例えば`[63 :book/price 3672 12345 true]`)は自動的に`:db/retract`される
   - もし`:book/title`が`:db.unique/value`なら、例外が発生する
   - もし`:book/title`が`:db/unique`属性を持ってなければ、普通通り、新規エンティティが作成される
 
