@@ -4,9 +4,9 @@
 
 ## もくじ
 
-- [1. イントロ・概観](tree/master/doc/1-intro.md)
-- [2. 基本](tree/master/doc/2-basics.md)
-- [3. エンティティとトランザクション](tree/master/doc/3-entity-and-tx.md)
+- [1. イントロ・概観](doc/1-intro.md)
+- [2. 基本](doc/2-basics.md)
+- [3. エンティティとトランザクション](doc/3-entity-and-tx.md)
 - [4. 属性とスキーマ](tree/master/doc/4-attr-and-schema.md)
 - [5. クエリー](tree/master/doc/5-query.md)
 - [6. Pull](tree/master/doc/6-pull.md)

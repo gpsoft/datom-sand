@@ -3,8 +3,7 @@
 
 - Datomic(Free版)をDLして解凍
 
-
-      http://www.datomic.com/get-datomic.html
+        http://www.datomic.com/get-datomic.html
 
 - 依存するJarをDL
 
@@ -13,31 +12,31 @@
 
 - Transactorを起動(in-memoryの場合は不要)
 
-      $ bin/transactor config/samples/free-transactor-template.properties
+        $ bin/transactor config/samples/free-transactor-template.properties
 
 ## プロジェクト
 
 - プロジェクトに依存性を追加
 
-      $ cd ~/dev
-      $ lein new datom-sand
-      $ cd datom-sand
-      $ vim project.clj
-          :dependencies [
-            [com.datomic/datomic-free "0.9.5404"]
-          ]
-      $ lein deps
-      $ lein repl
+        $ cd ~/dev
+        $ lein new datom-sand
+        $ cd datom-sand
+        $ vim project.clj
+            :dependencies [
+              [com.datomic/datomic-free "0.9.5404"]
+            ]
+        $ lein deps
+        $ lein repl
 
 - APIのnamespaceは`datomic.api`
 
-      $ vim src/datom-sand/core.clj
-          (ns datom-sand.core
-            (require [datomic.api :as d]))
+        $ vim src/datom-sand/core.clj
+            (ns datom-sand.core
+              (require [datomic.api :as d]))
 
 - またはREPLで
 
-      user=> (require '[datomic.api :as d])
+        user=> (require '[datomic.api :as d])
 
 ## 準備
 
