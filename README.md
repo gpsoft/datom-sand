@@ -7,13 +7,13 @@
 - [1. イントロ・概観](doc/1-intro.md)
 - [2. 基本](doc/2-basics.md)
 - [3. エンティティとトランザクション](doc/3-entity-and-tx.md)
-- [4. 属性とスキーマ](tree/master/doc/4-attr-and-schema.md)
-- [5. クエリー](tree/master/doc/5-query.md)
-- [6. Pull](tree/master/doc/6-pull.md)
-- [7. Rule](tree/master/doc/7-rule.md)
-- [8. Database function](tree/master/doc/8-db-fn.md)
-- [8. 履歴](tree/master/doc/8-history.md)
-- [9. スキーマの変更](tree/master/doc/9-alter-schema.md)
+- [4. 属性とスキーマ](doc/4-attr-and-schema.md)
+- [5. クエリー](doc/5-query.md)
+- [6. Pull](doc/6-pull.md)
+- [7. Rule](doc/7-rule.md)
+- [8. Database function](doc/8-db-fn.md)
+- [8. 履歴](doc/8-history.md)
+- [9. スキーマの変更](doc/9-alter-schema.md)
 
 ## サンプルデータ
 
