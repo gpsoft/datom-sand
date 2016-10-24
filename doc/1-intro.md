@@ -8,7 +8,7 @@
 - NoSQLより高いデータ表現力
 
 ## データモデル
-- DBはfact(事実)の蓄積
+- DBは、エンティティに関するfact(事実)の蓄積
   - factのassertion(表明)とretraction(撤回)
   - factはimmutable(過去の事実を書き変えることはできない)
 - factを表現する最小単位がDatom
@@ -47,6 +47,7 @@
 
 - Datomは、あるエンティティに関するfactを宣言する
 - Datomは、5つの要素(EAVTとoperation)からなる
+  - KeyとValueしかない、NoSQLより表現力が高い
 - EAVT
   - エンティティ(Entity) ...RDBの行に近いイメージ
   - 属性(Attribute) ...RDBの列に近いイメージ
