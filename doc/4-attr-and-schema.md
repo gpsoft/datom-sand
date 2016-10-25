@@ -68,26 +68,26 @@
 - 属性は特殊なエンティティなので、DBに、属性用のエンティティだと認識させる必要がある
   - 前述の5番目のDatomは、そのためのもの
 
-        [:db/add     ;;(5)
-         #db/id [:db.part/db -1]
-         :db.install/_attribute :db.part/db]
+            [:db/add     ;;(5)
+             #db/id [:db.part/db -1]
+             :db.install/_attribute :db.part/db]
 
   - 属性名に`_`を前置すると、関連付けの方向が逆転する
   - 仮に、この新しい属性エンティティのIDが85だとすると、以下のDatomと同じこと
 
-        [:db/add :db.part/db :db.install/attribute 85]
+            [:db/add :db.part/db :db.install/attribute 85]
 
 ## 参照型
 
 - 参照型は、RDBのforeign keyに近いイメージ
 - 属性エンティティの`:db/valueType`属性に`:db.type/ref`を指定
 
-      [{:db/id #db/id [:db.part/db]
-        :db/ident :customer/invited-by
-        :db/doc "カスタマーが、誰に紹介されたか"
-        :db/valueType :db.type/ref
-        :db/cardinality :db.cardinality/one
-        :db.install/_attribute :db.part/db}]
+          [{:db/id #db/id [:db.part/db]
+            :db/ident :customer/invited-by
+            :db/doc "カスタマーが、誰に紹介されたか"
+            :db/valueType :db.type/ref
+            :db/cardinality :db.cardinality/one
+            :db.install/_attribute :db.part/db}]
 
 - Datomicの参照型は、自動的に双方向になる
 - 別名に`_`を付けると逆方向の意味
@@ -99,39 +99,39 @@
 - 「Enum型」というのは無いが、参照型で代用可能
 - 属性値になりうるエンティティを、別名付きで、あらかじめ表明しておく
 
-      ;; Enum型の属性
-      [{:db/id #db/id [:db.part/db]
-        :db/ident :customer/pref
-        :db/doc "カスタマーが、どこに住んでるか(都道府県)"
-        :db/valueType :db.type/ref
-        :db/cardinality :db.cardinality/one
-        :db.install/_attribute :db.part/db}]
+          ;; Enum型の属性
+          [{:db/id #db/id [:db.part/db]
+            :db/ident :customer/pref
+            :db/doc "カスタマーが、どこに住んでるか(都道府県)"
+            :db/valueType :db.type/ref
+            :db/cardinality :db.cardinality/one
+            :db.install/_attribute :db.part/db}]
 
-      ;; 属性値用のエンティティ
-      [[:db/add #db/id[:db.part/user]
-        :db/ident :customer.pref/Hiroshima]
-       [:db/add #db/id[:db.part/user]
-        :db/ident :customer.pref/Yamaguchi]
-       [:db/add #db/id[:db.part/user]
-        :db/ident :customer.pref/Shimane]
-       ...]
+          ;; 属性値用のエンティティ
+          [[:db/add #db/id[:db.part/user]
+            :db/ident :customer.pref/Hiroshima]
+           [:db/add #db/id[:db.part/user]
+            :db/ident :customer.pref/Yamaguchi]
+           [:db/add #db/id[:db.part/user]
+            :db/ident :customer.pref/Shimane]
+           ...]
 
-      ;; カスタマーエンティティ
-      [{:db/id #db/id [:db.part/user]
-        :customer/name "深川125"
-        :customer/pref :customer.pref/Hiroshima}
-       ...]
+          ;; カスタマーエンティティ
+          [{:db/id #db/id [:db.part/user]
+            :customer/name "深川125"
+            :customer/pref :customer.pref/Hiroshima}
+           ...]
 
 ## 多重度
 
 - 多重度(`:db/cardinality`属性)は、`:db.cardinality/one`か`:db.cardinality/many`のどちらか
 
-      [{:db/id #db/id [:db.part/db]
-        :db/ident :customer/likes
-        :db/doc "カスタマーが好きなもの"
-        :db/valueType :db.type/ref
-        :db/cardinality :db.cardinality/many
-        :db.install/_attribute :db.part/db}]
+          [{:db/id #db/id [:db.part/db]
+            :db/ident :customer/likes
+            :db/doc "カスタマーが好きなもの"
+            :db/valueType :db.type/ref
+            :db/cardinality :db.cardinality/many
+            :db.install/_attribute :db.part/db}]
 
   - 1つのエンティティに複数の`:customer/likes`属性値を関連付けることができる
 
@@ -139,13 +139,13 @@
 
 - 属性エンティティに`:db/unique`属性を付けると、その属性値はシステム内で一意となる
 
-      [{:db/id #db/id [:db.part/db]
-        :db/ident :book/title
-        :db/doc "書籍のタイトル"
-        :db/valueType :db.type/string
-        :db/cardinality :db.cardinality/one
-        :db/unique :db.unique/identity
-        :db.install/_attribute :db.part/db}]
+          [{:db/id #db/id [:db.part/db]
+            :db/ident :book/title
+            :db/doc "書籍のタイトル"
+            :db/valueType :db.type/string
+            :db/cardinality :db.cardinality/one
+            :db/unique :db.unique/identity
+            :db.install/_attribute :db.part/db}]
 
   - エンティティを特定するのに、`:book/title`属性値が使えるようになる(Pullの項を参照)
   - 複数のエンティティに、同じ`:book/title`属性値を関連付けようとすると、例外が発生する
@@ -153,12 +153,12 @@
 - `:db/unique`属性の値は、`:db.unique/identity`か`:db.unique/value`のどちらか
 - 両者の違いは、仮エンティティIDの解決方法:
 
-      ;; 既に「プログラミングClojure」が登録済みで、
-      ;; そのエンティティIDが63と仮定する。
-      ;; ここで、下記のtx-dataをトランザクションすると…
-      [{:db/id #db/id [:db.part/user]
-        :book/title "プログラミングClojure"
-        :book/price 3200}]
+          ;; 既に「プログラミングClojure」が登録済みで、
+          ;; そのエンティティIDが63と仮定する。
+          ;; ここで、下記のtx-dataをトランザクションすると…
+          [{:db/id #db/id [:db.part/user]
+            :book/title "プログラミングClojure"
+            :book/price 3200}]
 
   - `:book/title`は`:db.unique/identity`なので、仮エンティティIDは63に解決される
     - つまりこのトランザクションは、既存エンティティの`:book/price`を変更することに相当する
@@ -170,24 +170,24 @@
 
 - 属性エンティティの`:db/isComponent`属性にtrueを関連付けると、「全体」と「部品」の関係を定義できる
 
-      [{:db/id #db/id [:db.part/db]
-        :db/ident :book/reviews
-        :db/doc "書籍のレビュー"
-        :db/valueType :db.type/ref
-        :db/isComponent true
-        :db/cardinality :db.cardinality/many
-        :db.install/_attribute :db.part/db}]
+          [{:db/id #db/id [:db.part/db]
+            :db/ident :book/reviews
+            :db/doc "書籍のレビュー"
+            :db/valueType :db.type/ref
+            :db/isComponent true
+            :db/cardinality :db.cardinality/many
+            :db.install/_attribute :db.part/db}]
 
   - 書籍エンティティが全体で、レビューエンティティが部品
   - 書籍なしにレビューが存在することは無い
 
 - 全体エンティティ作成時に、部品エンティティも作成できる
 
-      [{:db/id #db/id [:db.part/user]
-        :book/title "プログラミングClojure"
-        :book/price 3672
-        :book/reviews [{:review/title "オススメ"
-                        :review/num-stars 5}]}]
+          [{:db/id #db/id [:db.part/user]
+            :book/title "プログラミングClojure"
+            :book/price 3672
+            :book/reviews [{:review/title "オススメ"
+                            :review/num-stars 5}]}]
 
   - 部品エンティティの仮IDは不要
   - `:book/reviews`の多重度は`many`という点に注意
