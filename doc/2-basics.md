@@ -2,13 +2,15 @@
 ## インストール
 
 - Datomic(Free版)をDLして解凍
-~~~
-http://www.datomic.com/get-datomic.html
-~~~
+  ~~~
+  http://www.datomic.com/get-datomic.html
+  ~~~
 
 - 依存するJarをDL
-        $ cd ~/local/datomic-free-0.9.5404
-        $ bin/maven-install
+    ~~~
+    $ cd ~/local/datomic-free-0.9.5404
+    $ bin/maven-install
+    ~~~
 
 - Transactorを起動(in-memoryの場合は不要)
 
