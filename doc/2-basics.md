@@ -2,18 +2,22 @@
 ## インストール
 
 - Datomic(Free版)をDLして解凍
-        http://www.datomic.com/get-datomic.html
+~~~
+http://www.datomic.com/get-datomic.html
+~~~
 
 - 依存するJarをDL
         $ cd ~/local/datomic-free-0.9.5404
         $ bin/maven-install
 
 - Transactorを起動(in-memoryの場合は不要)
+
         $ bin/transactor config/samples/free-transactor-template.properties
 
 ## プロジェクト
 
 - プロジェクトに依存性を追加
+
         $ cd ~/dev
         $ lein new datom-sand
         $ cd datom-sand
