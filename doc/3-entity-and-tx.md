@@ -13,39 +13,38 @@
   - 「その*x*属性の値は*XXX*」を表明
   - 「その*y*属性の値は*YYY*」を表明
   - 「その*z*属性の値は*ZZZ*」を表明
+
           ;; 表明用のDatom
           [:db/add 32 x XXX]
           [:db/add 32 y YYY]
           [:db/add 32 z ZZZ]
 
-
 - 一旦表明したfactを書き換えることはできないが、それを打ち消す新たなfactを追記することはできる
-  - 「その*zzz*属性の値は*ZZZ*」を撤回
+  - 「その*z*属性の値は*ZZZ*」を撤回
 
-        ;; 撤回用のDatom
-        [:db/retract 32 zzz ZZZ]      ;; もはやZZZではない
-
+          ;; 撤回用のDatom
+          [:db/retract 32 z ZZZ]      ;; もはやZZZではない
 
 - 表明/撤回用Datomの一般形式
 
-      [:db/add     <エンティティID> <属性ID> <属性値>]
-      [:db/retract <エンティティID> <属性ID> <属性値>]
+        [:db/add     <エンティティID> <属性ID> <属性値>]
+        [:db/retract <エンティティID> <属性ID> <属性値>]
 
 ## エンティティの別名
 - エンティティには`:db/ident`属性を関連付けることができる ...エンティティの別名
 - IDが必要な多くの場面で、IDの代わりに別名を使うことができる
 
-      ;; 属性IDの代わりに別名を使用
-      ;; :live-in、:like、:work-forという別名を表明済みと仮定
-      [:db/add 32 :live-in "Japan"]       ;; 日本に住む
-      [:db/add 32 :like "Programming"]    ;; プログラミングが好きだ
-      [:db/add 32 :work-for "Panasonic"]  ;; Panasonicで働いている
+        ;; 属性IDの代わりに別名を使用
+        ;; :live-in、:like、:work-forという別名を表明済みと仮定
+        [:db/add 32 :live-in "Japan"]       ;; 日本に住む
+        [:db/add 32 :like "Programming"]    ;; プログラミングが好きだ
+        [:db/add 32 :work-for "Panasonic"]  ;; Panasonicで働いている
 
   - ここは少々メタ(meta-)なので、思考のストレッチが必要
   - 実は、属性もエンティティの一種
   - `:live-in`は、ある属性エンティティの別名
   - 仮にそのエンティティのIDが20だとすると、「エンティティ20の`:db/ident`属性の値は`:live-in`」を表明済み、ということ
-  - `:db/ident`は、組み込み属性(これもエンティティ)の別名
+  - `:db/ident`は、組み込みの属性エンティティの別名
 - エンティティの別名にはキーワードを使う
 - `:db/`や`:db.*/`で始まる別名はシステム予約
 
@@ -53,28 +52,30 @@
 
     :db/add
     :db/retract
-    :db/ident
+    :db/ident ...*
+    :db/valueType ...*
     :db.type/string
     :db.part/db
-    :db.install/attribute
+    :db.install/attribute ...*
+    ;; *印は、属性エンティティ
     ;; :db/idはエンティティではない(よって属性でもない。超越した存在)
 
 ## トランザクション
 - 表明/撤回したいDatomのコレクションをtx-dataと呼ぶ
 - トランザクションにより、tx-dataをDBへ記録する
 
-      ;; e32は、あるエンティティのIDと仮定
-      (def tx-data1
-        [[:db/add e32 :live-in "Japan"]
-         [:db/add e32 :like "Programming"]
-         [:db/add e32 :work-for "Panasonic"]])
-      (d/transact conn tx-data1)
+        ;; e32は、あるエンティティのIDと仮定
+        (def tx-data1
+          [[:db/add e32 :live-in "Japan"]
+           [:db/add e32 :like "Programming"]
+           [:db/add e32 :work-for "Panasonic"]])
+        (d/transact conn tx-data1)
 
-      (def tx-data2
-        [[:db/retract e32 :work-for "Panasonic"]])
-      (d/transact conn tx-data2)
-      ;; これ以降のDBスナップショットでは、
-      ;; e32がPanasonicで働いているという事実は無い
+        (def tx-data2
+          [[:db/retract e32 :work-for "Panasonic"]])
+        (d/transact conn tx-data2)
+        ;; これ以降のDBスナップショットでは、
+        ;; e32がPanasonicで働いているという事実は無い
 
   - `d/transact`は、トランザクションを実行する同期関数
   - 非同期版(`d/transact-async`)もある
@@ -82,23 +83,24 @@
 
 - 同じエンティティIDに対する表明用Datomは、マップにまとめて表記可能
 
-      (def tx-data3
-        [{:db/id e33
-          :live-in "Canada"
-          :like ["Sleeping" "Eating" "Watching TV"]}
-         {:db/id e34
-          :live-in "France"
-          :work-for "Interpol"}])
-      (d/transact conn tx-data3)
+        (def tx-data3
+          [{:db/id e33
+            :live-in "Canada"
+            :like ["Sleeping" "Eating" "Watching TV"]}
+           {:db/id e34
+            :live-in "France"
+            :work-for "Interpol"}])
+        (d/transact conn tx-data3)
 
-  - `:like`という属性の多重度が「多(many)」と仮定している
+  - ここでは、`:like`という属性の多重度が「多(many)」と仮定している
   - その場合、属性値を2つ以上関連付けることが可能(属性の項を参照)
 
 ## トランザクション(Tx)エンティティ
 
-- トランザクションを実行すると、トランザクション自身もエンティティとして記録される
+- トランザクションを実行すると、「トランザクションを実行した」というfactが自動的に記録される ...Txエンティティ
   - エンティティなのでIDを持つ
-  - デフォルトでは、`:db/txInstant`属性のみを持つ ...Tx実行時刻
+  - デフォルトでは`:db/txInstant`属性のみを持つ ...Tx実行時刻
+  - 仮にそのIDを1001とすると、`[:db/add 1001 :db/txInstant 123456]`といった感じ
 
 - トランザクションで記録される各Datomには、TxエンティティIDが刻まれる(EAVTのT)
 
@@ -181,9 +183,9 @@
 - パーティションも一種のエンティティである
 - 組み込みパーティション
 
-      :db.part/db            ;; 属性エンティティとパーティションエンティティを配置
-      :db.part/tx            ;; Txエンティティを配置
-      :db.part/user          ;; アプリ用エンティティを配置
+        :db.part/db            ;; 属性エンティティとパーティションエンティティを配置
+        :db.part/tx            ;; Txエンティティを配置
+        :db.part/user          ;; アプリ用エンティティを配置
 
 - 独自のパーティションを作ることも可能
 
@@ -194,3 +196,4 @@
       [{:db/id #db/id [:db.part/db]
         :db/ident :my-part
         :db.install/_partition :db.part/db}])
+
