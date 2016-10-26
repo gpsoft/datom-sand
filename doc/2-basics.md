@@ -63,6 +63,7 @@
 
   - `d/db`は、現時点のDBスナップショットを返す
   - 過去や未来のDBスナップショットも取得できる
+  - DBはスナップショットimmutable
   - 別のPeerがDBを変更したとしても、`db1`には影響しない
 
 ## トランザクション(Tx)
@@ -75,6 +76,8 @@
 
   - トランザクションは`conn`(接続)に対して実行する ...`(d/transact conn tx-data)`
   - 第2引数(`tx-data`)には、`add`/`retract`したいDatomのコレクションを指定
+    - ここではDatomを1つ指定した
+    - `#db/id [:db.part/user]`は、「新規エンティティ」を示す決まり文句
   - `INSERT INTO entities(db_doc) VALUES('Hello, world!');`に近いイメージ
 
 ## クエリー
@@ -85,7 +88,7 @@
         [?e :db/doc "Hello, world!" ?tx]]
       db1)
 
-  - クエリーはDBスナップショットに対して実行する
+  - クエリーはDBスナップショットに対して実行する ...`(d/q query db-snapshot)`
   - `?e`や`?tx`は変数
   - `:where`に続く条件(パターン)にマッチするDatomが検索され、その要素(EAVT)が変数へバインドされる
   - `SELECT eid, txid FROM entities WHERE db_doc='Hello, world!';`に近いイメージ
