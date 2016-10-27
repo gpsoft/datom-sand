@@ -2,9 +2,9 @@
 
 ## 属性(Attribute)
 
-- 属性は特殊なエンティティ
+- 属性も、一種のエンティティ
 - Datomの構成要素の1つ(EAVTのA)であり、スキーマを決める
-- 属性エンティティは必ず別名を持つ
+- 属性エンティティは必ず別名を持つ(つまり、`:db/ident`属性を持つ)
 - 属性エンティティの必須属性:
   - `:db/ident` ...別名
   - `:db/valueType` ...型
@@ -18,7 +18,7 @@
   - `:db/fulltext` ...全文検索対象かどうか
 - `:db/ident`と`:db/doc`を除き、`:db/`で始まる属性は、属性エンティティ専用の属性である(属性エンティティ以外のエンティティに使うべきでない)
 
-##### 属性エンティティの別名
+##### 属性エンティティの別名の例
 
     :comments
     :book/title
@@ -26,14 +26,14 @@
     :customer/pref
     :customer/invited-by
 
-- namespaceの部分(`book`や`customer`)により、属性をグループ化する
-- エンティティでグループ化することが多いが、それに限らない
+- 通常、namespaceの部分(`book`や`customer`)により、属性をグループ化する
+- 「namespace＝エンティティ名」とすることが多いが、そうしないことも珍しくない
 
 ## スキーマ(Schema)
 
 - スキーマを決めることの本質は
   - 属性の性質(その属性が、どんな値を取りうるか)を定義することであり
-  - あるエンティティが、どんな属性を持ちうるか(Datomicでは、それは自由)を定義することではない
+  - あるエンティティが、どんな属性を持ちうるかを定義することではない(Datomicでは、それは自由)
 - エンティティと属性の組み合わせに制約がないので、RDBのスキーマより自由度が高い
 - 属性もエンティティの一種なので、スキーマを定義するには、その属性エンティティに関するfactを、トランザクションにより記録すればよい
 - ただし、いくつか決まり事がある
@@ -72,15 +72,16 @@
              #db/id [:db.part/db -1]
              :db.install/_attribute :db.part/db]
 
-  - 属性名に`_`を前置すると、関連付けの方向が逆転する
-  - 仮に、この新しい属性エンティティのIDが85だとすると、以下のDatomと同じこと
+    - 属性名に`_`を前置すると、関連付けの方向が逆転する
+    - 仮に、この新しい属性エンティティのIDが85だとすると、以下のDatomと同じこと
 
-            [:db/add :db.part/db :db.install/attribute 85]
+              [:db/add :db.part/db :db.install/attribute 85]
 
 ## 参照型
 
 - 参照型は、RDBのforeign keyに近いイメージ
-- 属性エンティティの`:db/valueType`属性に`:db.type/ref`を指定
+  - 参照型の属性は、別のエンティティを参照するための属性
+- 属性エンティティの`:db/valueType`属性に`:db.type/ref`を指定する
 
           [{:db/id #db/id [:db.part/db]
             :db/ident :customer/invited-by
@@ -107,7 +108,7 @@
             :db/cardinality :db.cardinality/one
             :db.install/_attribute :db.part/db}]
 
-          ;; 属性値用のエンティティ
+          ;; `:customer/pref`属性の属性値用のエンティティ
           [[:db/add #db/id[:db.part/user]
             :db/ident :customer.pref/Hiroshima]
            [:db/add #db/id[:db.part/user]
@@ -124,7 +125,7 @@
 
 ## 多重度
 
-- 多重度(`:db/cardinality`属性)は、`:db.cardinality/one`か`:db.cardinality/many`のどちらか
+- 多重度(`:db/cardinality`属性)の値は、`:db.cardinality/one`か`:db.cardinality/many`のどちらか
 
           [{:db/id #db/id [:db.part/db]
             :db/ident :customer/likes
@@ -133,7 +134,7 @@
             :db/cardinality :db.cardinality/many
             :db.install/_attribute :db.part/db}]
 
-  - 1つのエンティティに複数の`:customer/likes`属性値を関連付けることができる
+  - `many`なら、1つのエンティティに複数の属性値を関連付けることができる
 
 ## 一意性
 
