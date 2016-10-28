@@ -49,8 +49,8 @@
 (def all-hello-docs
   '[:find ?e ?doc
     :where
-    [?e :db/doc ?doc]
-    [(re-matches #"^Hello.+$" ?doc)]])
+    [?e :db/doc ?doc]                   ;; For now,
+    [(re-matches #"^Hello.+$" ?doc)]])  ;; just imagine what's going on here.
 
 (count (d/q all-hello-docs db1))  ;; => 0
 (count (d/q all-hello-docs db2))  ;; => 1
