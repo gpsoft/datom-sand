@@ -108,7 +108,7 @@
             :db/cardinality :db.cardinality/one
             :db.install/_attribute :db.part/db}]
 
-          ;; `:customer/pref`属性の属性値用のエンティティ
+          ;; :customer/pref属性の属性値用のエンティティ
           [[:db/add #db/id[:db.part/user]
             :db/ident :customer.pref/Hiroshima]
            [:db/add #db/id[:db.part/user]
@@ -213,4 +213,5 @@
           slurp
           read-string))
 
-
+## [コードを見る](../tutorial/attr-and-schema.clj)
+## [次へ](5-query.md)
