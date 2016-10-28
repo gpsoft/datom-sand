@@ -200,5 +200,7 @@
         :db/ident :my-part
         :db.install/_partition :db.part/db}])  ;; 属性の項を読めば、このDatomが解読できるはず
 
-## [コードを見る](../tutorial/entity-and-tx.clj)
-## [次へ](4-attr-and-schema.md)
+## What's next?
+- [コードを見る](../tutorial/entity-and-tx.clj)
+- [2. 基本](2-basics.md)
+- [4. 属性とスキーマ](4-attr-and-schema.md)

@@ -65,4 +65,5 @@
 |2         |10           |`:db/retract`|13194139533312|true |
 |10        |10           |`:db/ident`  |13194139533312|true |
 
-## [次へ](2-basics.md)
+## What's next?
+- [2. 基本](2-basics.md)

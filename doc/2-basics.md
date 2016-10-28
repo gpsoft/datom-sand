@@ -56,7 +56,6 @@
     (d/create-database uri-in-memory)
     (def conn (d/connect uri-in-memory))
 
-
 ##### DBスナップショット取得
 
     (def db1 (d/db conn))
@@ -102,5 +101,7 @@
 
     - 最新のDBスナップショットに対してクエリーすれば、`#{[17592186045417 13194139534312]}`など、マッチするDatomのエンティティIDとトランザクションIDが返る
 
-## [コードを見る](../tutorial/basics.clj)
-## [次へ](3-entity-and-tx.md)
+## What's next?
+- [コードを見る](../tutorial/basics.clj)
+- [1. イントロ・概観](1-intro.md)
+- [3. エンティティとトランザクション](3-entity-and-tx.md)

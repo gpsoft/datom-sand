@@ -213,5 +213,7 @@
           slurp
           read-string))
 
-## [コードを見る](../tutorial/attr-and-schema.clj)
-## [次へ](5-query.md)
+## What's next?
+- [コードを見る](../tutorial/attr-and-schema.clj)
+- [3. エンティティとトランザクション](3-entity-and-tx.md)
+- [5. クエリー](5-query.md)
