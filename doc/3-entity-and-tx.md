@@ -98,25 +98,29 @@
 
 ## トランザクション(Tx)エンティティ
 
-- トランザクションを実行すると、「トランザクションを実行した」というfactが自動的に記録される ...Txエンティティ
+- トランザクションを実行すると、トランザクション自身もエンティティとして記録される ...Txのreify
+  - TxエンティティはDatomの構成要素の1つ(EAVTのT)で、「トランザクションを実行した」というfact
   - エンティティなのでIDを持つ
   - デフォルトでは`:db/txInstant`属性のみを持つ ...Tx実行時刻
-  - 仮にそのIDを1001とすると、tx-dataの中に、暗黙裡に`[:db/add 1001 :db/txInstant 123456]`のようなDatomが入る感じ
+  - 仮にそのIDを1001とすると、tx-dataの中に、暗黙裡に`[:db/add 1001 :db/txInstant 13194139534321]`のようなDatomが入る感じ
 
-- トランザクションで記録される各Datomには、TxエンティティIDが刻まれる(EAVTのT)
+- トランザクションで記録される各Datomには、TxエンティティIDが刻まれる
 
 |entity-id |attribute-id |value        |tx-id  |added|
 |----------|-------------|-------------|-------|-----|
 |32        |`:live-in`   |"Japan"      |1001   |true |
 |32        |`:like`      |"Programming"|1001   |true |
 |32        |`:work-for`  |"Panasonic"  |1001   |true |
+|1001      |`:txInstant` |1319413953...|1001   |true |
 |32        |`:work-for`  |"Panasonic"  |1002   |false|
+|1002      |`:txInstant` |1319413954...|1002   |true |
 |33        |`:live-in`   |"Canada"     |1003   |true |
 |33        |`:like`      |"Sleeping"   |1003   |true |
 |33        |`:like`      |"Eating"     |1003   |true |
 |33        |`:like`      |"Watching TV"|1003   |true |
 |34        |`:live-in`   |"France"     |1003   |true |
 |34        |`:work-for`  |"Interpl"    |1003   |true |
+|1003      |`:txInstant` |1319413955...|1003   |true |
 
 ## 仮エンティティID
 
@@ -145,13 +149,13 @@
 
 ##### 仮IDの使用
 
+    ;; 2つのエンティティを追加するtx-data。
     (def tx-data4
       [{:db/id #db/id [:db.part/user]
-        :live-in "Canada"
-        :like ["Sleeping" "Eating" "Watching TV"]}
-       [:db/add #db/id [:db.part/user -1] :live-in "France"]
-       [:db/add #db/id [:db.part/user -1] :work-for "Interpol"]])
-    (d/transact conn tx-data4)    ;; 2つのエンティティを追加
+        :live-in "Mexico"
+        :like ["Taco" "Burrito" "Empanada"]}
+       [:db/add #db/id [:db.part/user -1] :live-in "Italy"]
+       [:db/add #db/id [:db.part/user -1] :work-for "Ferrari"]])
 
 ## 正式なエンティティIDを得る
 
@@ -169,13 +173,13 @@
     (let [tmp1 (d/tempid :db.part/user -1)
           tmp2 (d/tempid :db.part/user -2)
           tx-data [{:db/id tmp1
-                    :live-in "Canada"
-                    :like ["Sleeping" "Eating" "Watching TV"]}
-                   [:db/add tmp2 :live-in "France"]
-                   [:db/add tmp2 :work-for "Interpol"]]
+                    :live-in "Mexico"
+                    :like ["Taco" "Burrito" "Empanada"]}
+                   [:db/add tmp2 :live-in "Italy"]
+                   [:db/add tmp2 :work-for "Ferrari"]]
           {:keys [db-after tempids]} @(d/transact conn tx-data)]
       [(d/resolve-tempid db-after tempids tmp1)
-       (d/resolve-tempid db-after tempids tmp2)]) ;; => [17592186045421 17592186045422]など
+       (d/resolve-tempid db-after tempids tmp2)]) ;; => [17592186045421 17592186045422]など。
 
 ## パーティション
 
