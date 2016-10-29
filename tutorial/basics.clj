@@ -20,6 +20,8 @@
     :db/doc "Hello, world!"]])    ;;   :db/doc属性の値は"Hello, world!"である。
 
 ;; クエリー。
+;; :db/doc属性値が"Hello, world!"なDatomを探し、
+;; そのエンティティIDとトランザクションIDを出力。
 (d/q
   '[:find ?e ?tx
     :where

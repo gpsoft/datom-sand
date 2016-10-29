@@ -2,21 +2,22 @@
 
 ## 属性(Attribute)
 
+- 属性はDatomの構成要素の1つ(EAVTのA)であり、スキーマを決める
 - 属性も、一種のエンティティ
-- Datomの構成要素の1つ(EAVTのA)であり、スキーマを決める
-- 属性エンティティは必ず別名を持つ(つまり、`:db/ident`属性を持つ)
-- 属性エンティティの必須属性:
-  - `:db/ident` ...別名
-  - `:db/valueType` ...型
-  - `:db/cardinality` ...多重度
-- 属性エンティティによく使われる任意の属性:
-  - `:db/doc` ...説明
-  - `:db/unique` ...一意性
-  - `:db/isComponent` ...コンポーネントかどうか
-  - `:db/noHistory` ...履歴管理するかどうか
-  - `:db/index` ...インデックス有無
-  - `:db/fulltext` ...全文検索対象かどうか
-- `:db/ident`と`:db/doc`を除き、`:db/`で始まる属性は、属性エンティティ専用の属性である(属性エンティティ以外のエンティティに使うべきでない)
+- エンティティなので、属性を持てる ...属性エンティティの属性
+- 組み込みの、属性エンティティ用の属性エンティティ
+  - 属性エンティティの必須属性:
+    - `:db/ident` ...別名
+    - `:db/valueType` ...型
+    - `:db/cardinality` ...多重度
+  - 属性エンティティによく付けられる任意の属性:
+    - `:db/doc` ...説明
+    - `:db/unique` ...一意性
+    - `:db/isComponent` ...コンポーネントかどうか
+    - `:db/noHistory` ...履歴管理するかどうか
+    - `:db/index` ...インデックス有無
+    - `:db/fulltext` ...全文検索対象かどうか
+  - :db/identと:db/docを除き、これらは、属性エンティティ専用の属性エンティティ
 
 ##### 属性エンティティの別名の例
 
@@ -28,6 +29,18 @@
 
 - 通常、namespaceの部分(`book`や`customer`)により、属性をグループ化する
 - 「namespace＝エンティティ名」とすることが多いが、そうしないことも珍しくない
+
+##### 組み込みの属性エンティティの例(上記以外)
+
+    :db.install/partition
+    :db.install/attribute
+    :db.alter/attribute
+    :db.install/valueType
+    :db.install/function
+    :db/txInstant
+    :db/code
+    :db/fn
+    :db/lang
 
 ## スキーマ(Schema)
 
@@ -76,6 +89,16 @@
     - 仮に、この新しい属性エンティティのIDが85だとすると、以下のDatomと同じこと
 
               [:db/add :db.part/db :db.install/attribute 85]
+
+## 属性の型(`:db/valueType`)
+
+    :db.type/string
+    :db.type/boolean
+    :db.type/long
+    :db.type/double
+    :db.type/ref
+    :db.type/fn
+    ...
 
 ## 参照型
 

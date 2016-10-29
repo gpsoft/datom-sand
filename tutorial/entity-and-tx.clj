@@ -79,9 +79,9 @@
 ;; 撤回用Datomはカウントされない。
 ;; d/qでは、撤回用Datomを見ることはできない。
 (count (d/q '[:find ?tx
-              :in $ ?e
-              :where
-              [?e _ _ ?tx]]
+              :in $ ?e        ;; Well, you'll understand this
+              :where          ;; when you read
+              [?e _ _ ?tx]]   ;; the Query section.
             (d/db conn) e32)) ;; => 2(エンティティ作成時と:live-inなどをassertしたとき)
 
 ;; 仮IDと新規エンティティ。
@@ -107,7 +107,7 @@
    (d/resolve-tempid db-after tempids tmp2)]) ;; => [17592186045421 17592186045422]など。
 
 ;; 住んでる国。
-(d/q '[:find [?c ...]
+(d/q '[:find [?c ...]     ;; Returns a vector of scalars instead of a set of vectors.
        :where
        [_ :live-in ?c]]
      (d/db conn)) ;; => ["Canada" "Japan" "Mexico" "Italy" "France"]
@@ -134,7 +134,7 @@
   conn
   [{:db/id #db/id [:db.part/db]
     :db/ident :my-part
-    :db.install/_partition :db.part/db}])
+    :db.install/_partition :db.part/db}])   ;; `_partition` is reverse reference (See the attribute section).
 
 ;; パーティション一覧。
 (d/q '[:find [?pname ...]
