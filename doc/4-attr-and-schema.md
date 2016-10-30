@@ -266,7 +266,7 @@
 
 - `read-string`は先頭のtx-dataだけを読む
 - すべてのtx-dataを読むには、`datomic.Util`クラスの`readAll`メソッドを使う
-  - [`datom-sand.util/read-edn`](../src/datom-sand/util.clj)を参照
+  - [`datom-sand.util/read-edn`](../src/datom_sand/util.clj)を参照
 
 ## What's next?
 - [コードを見る](../tutorial/attr-and-schema.clj)
