@@ -98,6 +98,9 @@
     :db.type/double
     :db.type/ref
     :db.type/fn
+    :db.type/instant ...java.util.Dateインスタンス
+    :db.type/uuid ...java.util.UUIDインスタンス
+    :db.type/uri ...java.net.URIインスタンス
     ...
 
 ## 参照型(`:db.type/ref`)

@@ -32,7 +32,7 @@
   :db/valueType :db.type/string
   :db/cardinality :db.cardinality/one
   :db.install/_attribute :db.part/db}
- {:db/id #db/id [:db.part/db]
+ #_{:db/id #db/id [:db.part/db]
   :db/ident :review/body
   :db/doc "レビューの本文"
   :db/valueType :db.type/string
