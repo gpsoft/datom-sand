@@ -157,7 +157,7 @@
        [:db/add #db/id [:db.part/user -1] :live-in "Italy"]
        [:db/add #db/id [:db.part/user -1] :work-for "Ferrari"]])
 
-## 正式なエンティティIDを得る
+## 正式なエンティティIDを得る(仮IDの解決)
 
 - `d/transact`や`d/transact-async`が返すfutureを`deref`するとマップが得られる
 - マップのキーは:
@@ -166,7 +166,7 @@
   - `:tx-data` ...Txのtx-data
   - `:tempids` ...`d/resolve-tempid`用オブジェクト
 
-- 正式なエンティティIDを得るには`d/resolve-tempid`を使う
+- 正式なエンティティIDを得る(仮IDを解決する)には`d/resolve-tempid`を使う
 
 ##### 使用例
 

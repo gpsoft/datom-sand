@@ -50,11 +50,11 @@
 - エンティティと属性の組み合わせに制約がないので、RDBのスキーマより自由度が高い
 - 属性もエンティティの一種なので、スキーマを定義するには、その属性エンティティに関するfactを、トランザクションにより記録すればよい
 - ただし、いくつか決まり事がある
-  - 属性エンティティは、`:db.part/db`パーティションに配置
+  - 属性エンティティは、`:db.part/db`パーティションに配置する
   - 属性エンティティには、`:db/ident`、`:db/valueType`、`:db/cardinality`属性が必須
   - 定義する属性エンティティを、`:db.part/db`エンティティの、`:db.install/attribute`属性の値として関連付ける
 
-##### 属性の例
+##### 属性を定義するtx-dataの例
 
     [;; (1):customer/nameという名前(別名)で、
      ;; (2)文字列型で、
@@ -90,7 +90,7 @@
 
               [:db/add :db.part/db :db.install/attribute 85]
 
-## 属性の型(`:db/valueType`)
+## 属性の型(`:db/valueType`属性の値)
 
     :db.type/string
     :db.type/boolean
@@ -100,11 +100,10 @@
     :db.type/fn
     ...
 
-## 参照型
+## 参照型(`:db.type/ref`)
 
-- 参照型は、RDBのforeign keyに近いイメージ
-  - 参照型の属性は、別のエンティティを参照するための属性
-- 属性エンティティの`:db/valueType`属性に`:db.type/ref`を指定する
+- 参照型の属性は、別のエンティティを参照するための属性
+- RDBのforeign keyに近いイメージ
 
           [{:db/id #db/id [:db.part/db]
             :db/ident :customer/invited-by
@@ -137,7 +136,7 @@
            [:db/add #db/id[:db.part/user]
             :db/ident :customer.pref/Yamaguchi]
            [:db/add #db/id[:db.part/user]
-            :db/ident :customer.pref/Shimane]
+            :db/ident :customer.pref/Fukuoka]
            ...]
 
           ;; カスタマーエンティティ
@@ -146,9 +145,9 @@
             :customer/pref :customer.pref/Hiroshima}
            ...]
 
-## 多重度
+## 多重度(`:db/cardinality`属性)
 
-- 多重度(`:db/cardinality`属性)の値は、`:db.cardinality/one`か`:db.cardinality/many`のどちらか
+- 多重度の値は、`:db.cardinality/one`か`:db.cardinality/many`のどちらか
 
           [{:db/id #db/id [:db.part/db]
             :db/ident :customer/likes
@@ -159,7 +158,17 @@
 
   - `many`なら、1つのエンティティに複数の属性値を関連付けることができる
 
-## 一意性
+            ;; 1つずつでもいいし、
+            [[:db/add customer1 :customer/likes review1]
+             [:db/add customer1 :customer/likes comment30]
+             [:db/add customer1 :customer/likes comment31]]
+            ;; まとめてもいい。
+            [[:db/add customer1
+              :customer/likes [review1 comment30 comment31]]]
+
+  - `one`なら、あと勝ち(古いDatomは自動的に`:db/retract`される
+
+## 一意性(`:db/unique`)
 
 - 属性エンティティに`:db/unique`属性を付けると、その属性値はシステム内で一意となる
 
@@ -171,11 +180,13 @@
             :db/unique :db.unique/identity
             :db.install/_attribute :db.part/db}]
 
-  - エンティティを特定するのに、`:book/title`属性値が使えるようになる(Pullの項を参照)
-  - 複数のエンティティに、同じ`:book/title`属性値を関連付けようとすると、例外が発生する
+  - このドメインでは、同じタイトルの書籍が複数存在することは無い
+    - 既存の複数のエンティティに、同じ`:book/title`属性値を関連付けようとすると、例外が発生する
+
+### Upsert(Insert or Update)
 
 - `:db/unique`属性の値は、`:db.unique/identity`か`:db.unique/value`のどちらか
-- 両者の違いは、仮エンティティIDの解決方法:
+- `identity`と`value`の違いは、仮エンティティIDの解決方法
 
           ;; 既に「プログラミングClojure」が登録済みで、
           ;; そのエンティティIDが63と仮定する。
@@ -184,11 +195,24 @@
             :book/title "プログラミングClojure"
             :book/price 3200}]
 
-  - `:book/title`は`:db.unique/identity`なので、仮エンティティIDは63に解決される
-    - つまりこのトランザクションは、既存エンティティの`:book/price`を変更することに相当する
-    - 古いDatom(例えば`[63 :book/price 3672 12345 true]`)は自動的に`:db/retract`される
-  - もし`:book/title`が`:db.unique/value`なら、例外が発生する
-  - もし`:book/title`が`:db/unique`属性を持ってなければ、普通通り、新規エンティティが作成される
+  - `:book/title`の`:db/unique`属性値が`identity`なら仮エンティティIDは63に解決され、`value`なら例外が発生する
+  - もし`:db/unique`属性を持たないなら、普通通り、新規のエンティティIDに解決される
+  - `identity`の場合、上記のtx-dataは:
+    - もし「プログラミングClojure」が存在しないなら新規に作り(Insert)、
+    - 存在するなら更新しろ(Update)、という意味になる
+    - 後者の場合、古いDatom(例えば`[63 :book/price 3672 12345 true]`)は自動的に`:db/retract`される
+
+### Lookup Ref
+
+- 書籍タイトルが一意ということは、タイトルが分かれば書籍エンティティを特定できるということ
+- これを利用したのが、Lookup Ref
+
+          ;; Lookup Refの例。
+          [:book/title "プログラミングClojure"]
+          [:bokk/title "Land of Lisp"]
+
+  - Lookup Refをtx-dataの中やDatomic API関数の引数として使うと、エンティティIDに評価される
+  - 例えば2番目は、「`:book/title`属性値として"Land of Lisp"を持つエンティティのID」という意味
 
 ## コンポーネント
 
@@ -203,6 +227,7 @@
             :db.install/_attribute :db.part/db}]
 
   - 書籍エンティティが全体で、レビューエンティティが部品
+  - このドメインでは、レビューを書籍の一部とみなす
   - 書籍なしにレビューが存在することは無い
 
 - 全体エンティティ作成時に、部品エンティティも作成できる
@@ -211,10 +236,12 @@
             :book/title "プログラミングClojure"
             :book/price 3672
             :book/reviews [{:review/title "オススメ"
-                            :review/num-stars 5}]}]
+                            :review/num-stars 5}]}
+                           {:review/title "定番"
+                            :review/num-stars 4}]
 
   - 部品エンティティの仮IDは不要
-  - `:book/reviews`の多重度は`many`という点に注意
+  - 実は全体・部品の関係が無くても、子エンティティ側の属性のどれかが`:db/unique`なら、上記の書き方が可能
 
 ## スキーマファイル(edn)
 
@@ -231,10 +258,15 @@
 
 ##### スキーマ用Txを実行
 
-    (d/transact conn
-      (-> path-to-schema-edn
+    (d/transact
+      conn
+      (-> path-to-the-customer-schema-edn
           slurp
           read-string))
+
+- `read-string`は先頭のtx-dataだけを読む
+- すべてのtx-dataを読むには、`datomic.Util`クラスの`readAll`メソッドを使う
+  - [`datom-sand.util/read-edn`](../src/datom-sand/util.clj)を参照
 
 ## What's next?
 - [コードを見る](../tutorial/attr-and-schema.clj)
