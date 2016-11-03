@@ -142,6 +142,24 @@
        [?r :review/title ?rt]]
      (d/db conn)) ;; => #{[3672 "定番"] [3672 "オススメ"]}
 
+;; d/entityとd/touchにより属性にアクセスする。
+;; コンポーネントな属性については、参照先エンティティもロードされる。
+(let [db (d/db conn)
+      e (d/entity db [:book/title "プログラミングClojure"])]
+  (d/touch e))
+;; => {:db/id 17592186045432,
+;;     :book/title "プログラミングClojure",
+;;     :book/price 3200,
+;;     :book/reviews
+;;       #{{:db/id 17592186045434,
+;;          :review/title "定番",
+;;          :review/num-stars 4,
+;;          :review/reviewer {:db/id 17592186045429}}
+;;         {:db/id 17592186045433,
+;;          :review/title "オススメ",
+;;          :review/num-stars 5,
+;;          :review/reviewer {:db/id 17592186045428}}}}
+
 ;; 価格を改訂。
 (d/transact
   conn
