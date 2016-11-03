@@ -22,6 +22,7 @@
   - `data1`, `data2`, `data3` ...Datomのパターン
   - `$`以外の仮引数が無いなら`:in`は省略可能
 - 例
+
           ;; 書籍タイトルで検索するクエリー式。
           (def find-books-by-title
             '[:find [?bt ...]
@@ -48,8 +49,8 @@
                     :args [db #".*Lisp.*"]
                     :timeout 1000}) ;; 1000msec
 
-  - `db`がクエリー式の`$`にバインドされる
-  - `#".*Lisp.*"`は`regex`に
+  - 実引数は、`db`と`#".*Lisp.*"`
+  - それぞれ、クエリー式の仮引数`$`と`regex`にバインドされる
 
 - クエリー式は、マップや文字列で記述することも可能
 
@@ -106,15 +107,18 @@
             ;;      [17592186045446 "Land of Lisp"]
             ;;      [17592186045450 "On Lisp"]
             ;;      [17592186045435 "プログラミングClojure"]}
+
             (d/q '[:find [?bt ...]
                    :where [?e :book/title ?bt]] db)
             ;; => ["Land of Lisp"
             ;;     "すごいHaskellたのしく学ぼう!"
             ;;     "On Lisp" "プログラミングClojure"
             ;;     "Real World Haskell"]
+
             (d/q '[:find ?bt .
                    :where [?e :book/title ?bt]] db)
             ;; => "Land of Lisp"
+
             (d/q '[:find [?e ?bt]
                    :where [?e :book/title ?bt]] db)
             ;; => [17592186045442 "Real World Haskell"]
@@ -167,7 +171,7 @@
     (rand 5 ?xs)    ;; ランダムに5つ(同じものが選ばれる可能性あり)。
     (sample 5 ?xs)  ;; 最大5つのdistinctな値。
 
-##### 集約関数の自作。
+##### 集約関数の自作
 
     (defn longest-title [titles]
       (let [longest (apply max-key count titles)]
