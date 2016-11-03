@@ -13,6 +13,10 @@
   :customer/pref :customer.pref/Okayama
   :customer/invited-by #db/id [:db.part/user -2]}
  {:db/id #db/id [:db.part/user]
+  :customer/name "お得意様"
+  :customer/pref :customer.pref/Fukuoka
+  :customer/invited-by #db/id [:db.part/user -1]}
+ {:db/id #db/id [:db.part/user]
   :customer/name "ぼく田中"
   :customer/pref :customer.pref/Tottori
   :customer/invited-by #db/id [:db.part/user -3]}]

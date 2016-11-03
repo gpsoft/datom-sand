@@ -1,15 +1,69 @@
 [{:db/id #db/id [:db.part/user]
   :book/title "プログラミングClojure"
-  :book/price 3672}
+  :book/price 3672
+  :book/reviews [{:review/title "オススメ"
+                  :review/num-stars 5
+                  :review/reviewer [:customer/name "深川125"]}
+                 {:review/title "定番"
+                  :review/num-stars 4
+                  :review/reviewer [:customer/name "とるたん"]}
+                 {:review/title "キーパーソンStuの本"
+                  :review/num-stars 5
+                  :review/reviewer [:customer/name "ただのカスタマー"]}
+                 {:review/title "関数型プログラミング"
+                  :review/num-stars 4
+                  :review/reviewer [:customer/name "ぼく田中"]}
+                 {:review/title "Lispの一種"
+                  :review/num-stars 5
+                  :review/reviewer [:customer/name "お得意様"]}
+                 {:review/title "和書"
+                  :review/num-stars 5
+                  :review/reviewer [:customer/name "ドラゴン"]}]}
  {:db/id #db/id [:db.part/user]
   :book/title "Real World Haskell"
-  :book/price 4014}
+  :book/price 4014
+  :book/reviews [{:review/title "実践的"
+                  :review/num-stars 4
+                  :review/reviewer [:customer/name "深川125"]}
+                 {:review/title "モナド!!"
+                  :review/num-stars 4
+                  :review/reviewer [:customer/name "ドラゴン"]}
+                 {:review/title "やや難解"
+                  :review/num-stars 3
+                  :review/reviewer [:customer/name "お得意様"]}]}
  {:db/id #db/id [:db.part/user]
   :book/title "Land of Lisp"
-  :book/price 4104}
+  :book/price 4104
+  :book/reviews [{:review/title "最高"
+                  :review/num-stars 5
+                  :review/reviewer [:customer/name "深川125"]}
+                 {:review/title "The best"
+                  :review/num-stars 5
+                  :review/reviewer [:customer/name "ぼく田中"]}
+                 {:review/title "Learn You a Lisp for Great Good!"
+                  :review/num-stars 5
+                  :review/reviewer [:customer/name "ただのカスタマー"]}]}
  {:db/id #db/id [:db.part/user]
   :book/title "On Lisp"
-  :book/price 4104}
+  :book/price 4104
+  :book/reviews [{:review/title "神?"
+                  :review/num-stars 5
+                  :review/reviewer [:customer/name "深川125"]}
+                 {:review/title "マクロでボトムアップ"
+                  :review/num-stars 4
+                  :review/reviewer [:customer/name "お得意様"]}
+                 {:review/title "上級者向け"
+                  :review/num-stars 4
+                  :review/reviewer [:customer/name "ただのカスタマー"]}
+                 {:review/title "時間をかけても読む価値あり"
+                  :review/num-stars 5
+                  :review/reviewer [:customer/name "ぼく田中"]}]}
  {:db/id #db/id [:db.part/user]
   :book/title "すごいHaskellたのしく学ぼう!"
-  :book/price 3024}]
+  :book/price 3024
+  :book/reviews [{:review/title "楽しいけど優しくはない"
+                  :review/num-stars 4
+                  :review/reviewer [:customer/name "ドラゴン"]}
+                 {:review/title "Functor/Applicative/Monoid/Monad"
+                  :review/num-stars 4
+                  :review/reviewer [:customer/name "お得意様"]}]}]
