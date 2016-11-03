@@ -63,7 +63,7 @@
 
 ## トランザクション
 - 表明/撤回したいDatomのコレクションをtx-dataと呼ぶ
-- トランザクションにより、tx-dataをDBへ記録する
+- tx-dataをTransactorへ渡すと、トランザクションが実行され、tx-dataがDBへ記録される
 
           ;; e32は、あるエンティティのIDと仮定
           (def tx-data1
@@ -203,6 +203,38 @@
       [{:db/id #db/id [:db.part/db]
         :db/ident :my-part
         :db.install/_partition :db.part/db}])  ;; 属性の項を読めば、このDatomが解読できるはず
+
+## エンティティオブジェクト
+
+- `d/entity`関数により、あるDBスナップショットにおける各エンティティの姿を、エンティティオブジェクトとして得ることができる
+
+          (d/entity (d/db conn) e32)  ;; => {:db/id 17592186045418}
+          (let [e (d/entity (d/db conn) e32)]
+            (:live-in e)) ;; => Japan
+
+  - マップのように見えるが、実際はマップではない
+  - しかし、マップ的に使用可能
+    - `empty?`, `cons`, `keys`, `contains?`, `get-in`など
+  - lazyなので、`d/entity`直後は`:db/id`キーしか持ってない
+  - しかし、属性名をキーにしてアクセスすれば、属性値を得ることができる
+    - 必要に応じてDBスナップショットから属性値がロードされる
+    - Transactorと通信するわけではない(DBスナップショットはクライアント側にある)
+- `d/touch`関数により、すべての属性を強制ロード可能
+
+          (-> (d/db conn)
+              (d/entity e32)
+              d/touch)
+          ;; => {:db/id 17592186045418,
+          ;;     :db/doc "Entity#32",
+          ;;     :live-in "Japan",
+          ;;     :like #{"Programming"}}
+
+- `d/entity-db`関数により、エンティティオブジェクトからDBスナップショットを逆引きできる
+
+          (let [db (d/db conn)
+                e (d/entity db e32)
+                e-db (d/entity-db e)]
+            (= db e-db))  ;; => true
 
 ## What's next?
 - [コードを見る](../tutorial/entity-and-tx.clj)

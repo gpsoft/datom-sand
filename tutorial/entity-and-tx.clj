@@ -142,3 +142,34 @@
        [:db.part/db :db.install/partition ?p]
        [?p :db/ident ?pname]]
      (d/db conn)) ;; => [:db.part/db :db.part/tx :my-part :db.part/user]
+
+;; エンティティオブジェクト。
+(d/entity (d/db conn) e32)  ;; => {:db/id 17592186045418}
+(let [e (d/entity (d/db conn) e32)]
+  (:live-in e)) ;; => Japan
+(-> (d/db conn)
+    (d/entity e32)
+    d/touch)
+;; => {:db/id 17592186045418,
+;;     :db/doc "Entity#32",
+;;     :live-in "Japan",
+;;     :like #{"Programming"}}
+(let [db (d/db conn)
+      e (d/entity db e32)
+      e-db (d/entity-db e)]
+  (= db e-db))  ;; => true
+
+(let [e (d/entity (d/db conn) e32)]
+  (println (d/entity-db e))
+  (println e)                      ;; => {:db/id 17592186045418}
+  (println (map? e))               ;; => false
+  (println (= e {:db/id 17592186045418})) ;; => false
+  (println (empty? e))             ;; => false
+  (println (keys e)) ;; => (:db/doc :live-in :like)
+  (println (seq e))  ;; => ([:db/doc Entity#32]
+  ;;                        [:live-in Japan]
+  ;;                        [:like #{Programming}])
+  (println (contains? e :live-in)) ;; => true
+  (println (:live-in e))           ;; => Japan
+  (println (get-in e [:like])))    ;; => #{Programming}
+

@@ -1,6 +1,6 @@
 # Datom-sand
 
-新感覚データベース**"Datomic"**の練習とチュートリアル的なもの。
+ClojureでDatomic。新感覚データベース**"Datomic"**の練習とチュートリアル的なもの。
 
 ## もくじ
 
