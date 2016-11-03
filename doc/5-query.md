@@ -1,14 +1,13 @@
 # 5. クエリー
 
-## クエリー
+## Datomicのクエリー
 
-- SQLのSELECT文に相当
-- [Datalog](https://en.wikipedia.org/wiki/Datalog)と呼ばれる、論理プログラミングを基礎にしたクエリー言語を実装したもの
+- 論理プログラミングを基礎にしたクエリー言語[Datalog](https://en.wikipedia.org/wiki/Datalog)を、Clojure文法に落とし込んだもの
 - 書式
 
-          [:find ?a ?b             ;; SELECT句相当。
+          [:find ?a ?b             ;; SELECT句に相当。
            :in $db1 $db2 ?c ?d     ;; 仮引数。
-           :where                  ;; WHERE句相当。
+           :where                  ;; WHERE句に相当。
            data1
            data2
            data3
@@ -38,7 +37,6 @@
     - `[(re-matches ?regex ?bt)]` ...`?bt`が正規表現`?regex`にマッチする
 
 - クエリーを実行するには、`d/q`関数か`d/query`関数を使用
-- `d/query`はタイムアウトを指定可能
 
           ;; タイトルに"Lisp"を含む書籍。
           (d/q find-books-by-title
@@ -51,6 +49,7 @@
 
   - 実引数は、`db`と`#".*Lisp.*"`
   - それぞれ、クエリー式の仮引数`$`と`regex`にバインドされる
+  - `d/query`はタイムアウトを指定可能
 
 - クエリー式は、マップや文字列で記述することも可能
 
