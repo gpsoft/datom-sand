@@ -152,7 +152,23 @@
 (defn longest-title [titles]
   (let [longest (apply max-key count titles)]
     (str longest "(" (count longest) ")")))
-(d/q '[:find [(user/longest-title ?bt) ...]
+(d/q '[:find [(user/longest-title ?bt) ...] ;; namespace付きで使用。
        :where
        [?e :book/title ?bt]]
      db)  ;; => ["Real World Haskell(18)"]
+
+;; 「深川125」がレビューしたClojureの書籍か、
+;; 「ドラゴン」がレビューしたHaskellの書籍。
+(d/q '[:find ?name ?bt
+       :in $ [[?name ?regex]]
+       :where
+       [?e :customer/name ?name]
+       [?r :review/reviewer ?e]
+       [?b :book/reviews ?r]
+       [?b :book/title ?bt]
+       [(re-matches ?regex ?bt)]]
+     db [["深川125" #".*Clojure.*"]
+         ["ドラゴン" #".*Haskell.*"]])
+;; => #{["ドラゴン" "すごいHaskellたのしく学ぼう!"]
+;;      ["深川125" "プログラミングClojure"]
+;;      ["ドラゴン" "Real World Haskell"]}

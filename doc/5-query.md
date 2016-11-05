@@ -122,6 +122,8 @@
                    :where [?e :book/title ?bt]] db)
             ;; => [17592186045442 "Real World Haskell"]
 
+## 集約とWith句(`:with`)
+
 - 集約も可能
 
           ;; 各書籍のレビュー星数の平均。
@@ -136,6 +138,7 @@
           ;;     ["Real World Haskell" 3.5]
           ;;     ["すごいHaskellたのしく学ぼう!" 4.0]
           ;;     ["プログラミングClojure" 4.5]]
+
   - ただし、↑これは間違い
     - `[?bt ?stars]`のセットに対して集約が行われるので、重複が除外されてしまう
     - 例えば「プログラミングClojure」には6つのレビューがあり、星数は5, 5, 4, 5, 4, 5だが、↑ここでは5と4の平均が出ている
@@ -176,10 +179,112 @@
       (let [longest (apply max-key count titles)]
         (str longest "(" (count longest) ")")))
 
-    (d/q '[:find [(user/longest-title ?bt) ...]
+    (d/q '[:find [(user/longest-title ?bt) ...] ;; namespace付きで使用。
            :where
            [?e :book/title ?bt]]
          db)  ;; => ["Real World Haskell(18)"]
+
+## In句(`:in`)
+
+- `d/q`や`d/query`で渡す引数を`:in`で受け取る
+- In句には記号(`$`,`?`,`%`)を前置したシンボルを列挙
+
+             :in $db1 $db2 ?c ?d %
+
+- `$`で始まるのはDBスナップショット
+  - Where句で使用する
+
+            :where
+            [$db1 ?e :customer/name ?n]
+            [$db2 ?ee :book/title ?bt]
+
+  - DBスナップショットが1つだけなら、単に`$`として良い
+    - その場合、Where句に書く必要もない
+
+              :in $ ?c ?d
+              :where
+              [?e ?a ?v ?t]
+
+- `?`で始まるのは変数
+  - Where句の中で、パターンマッチに使用する
+- `%`は、Where句の中でルールを使う場合に指定する(ルールについては後述)
+- `$`以外の入力が無い場合、`:in`は省略可能
+
+## In句の変数バインディング
+
+- クエリーへの入力をIn句の変数へバインドする、4つのパターン
+  - スカラ
+
+            ;; クエリ式
+            :in $ ?a
+
+            ;; クエリ実行
+            (d/q '[……]
+              db
+              "val")
+
+            ;; バインド
+            ?a ← "val"
+
+  - 組
+
+            ;; クエリ式
+            :in $ [?a ?b]
+
+            ;; クエリ実行
+            (d/q '[………]
+              db
+              ["vala" "valb"])
+
+            ;; バインド
+            ?a ← "vala" かつ ?b ← "valb"
+
+  - コレクション
+
+            ;; クエリ式
+            :in $ [?a ...]
+
+            ;; クエリ実行
+            (d/q '[………]
+              db
+              ["vala1" "vala2" "vala3"])
+
+            ;; バインド
+            ?a ← "vala1" または ?a ← "vala2" または ?a ← "vala3"
+
+  - 関係
+
+            ;; クエリ式
+            :in $ [[?a ?b]]
+
+            ;; クエリ実行
+            (d/q '[………]
+              db
+              [["vala1" "valb1"]
+               ["vala2" "valb2"]])
+
+            ;; バインド
+            ?a ← "vala1" かつ ?b ← "valb1"
+            または
+            ?a ← "vala2" かつ ?b ← "valb2"
+
+#### 例
+
+    ;; 「深川125」がレビューしたClojureの書籍か、
+    ;; 「ドラゴン」がレビューしたHaskellの書籍。
+    (d/q '[:find ?name ?bt
+           :in $ [[?name ?regex]]
+           :where
+           [?e :customer/name ?name]
+           [?r :review/reviewer ?e]
+           [?b :book/reviews ?r]
+           [?b :book/title ?bt]
+           [(re-matches ?regex ?bt)]]
+         db [["深川125" #".*Clojure.*"]
+             ["ドラゴン" #".*Haskell.*"]])
+    ;; => #{["ドラゴン" "すごいHaskellたのしく学ぼう!"]
+    ;;      ["深川125" "プログラミングClojure"]
+    ;;      ["ドラゴン" "Real World Haskell"]}
 
 ## What's next?
 - [コードを見る](../tutorial/query.clj)
