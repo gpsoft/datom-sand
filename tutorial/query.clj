@@ -172,3 +172,44 @@
 ;; => #{["ドラゴン" "すごいHaskellたのしく学ぼう!"]
 ;;      ["深川125" "プログラミングClojure"]
 ;;      ["ドラゴン" "Real World Haskell"]}
+
+
+;; `:customer/*`属性。
+(d/q '[:find [?an ...]
+       :where
+       [:db.part/db :db.install/attribute ?a]
+       [?a :db/ident ?an]
+       [(namespace ?an) ?ns]
+       [(= ?ns "customer")]]
+     db)
+;; => [:customer/name
+;;     :customer/pref
+;;     :customer/invited-by
+;;     :customer/likes]
+
+;; タイトルが"p"で終わる書籍。
+(d/q '[:find [?bt ...]
+       :where
+       [?e :book/title ?bt]
+       [(.endsWith ?bt "p")]]
+     db)  ;; => ["Land of Lisp" "On Lisp"]
+
+;; DBスナップショットなしでクエリする
+(d/q '[:find ?k ?v
+       :where
+       [(System/getProperties) [[?k ?v]]]
+       [(.startsWith ^String ?k "java.vm")]])
+;; => #{["java.vm.version" "25.31-b07"]
+;;      ["java.vm.specification.version" "1.8"]
+;;      ["java.vm.vendor" "Oracle Corporation"]
+;;      ...}
+(d/q '[:find ?e ?a ?v ?t
+       :in [[?e ?a ?v ?t]]
+       :where
+       [(= ?t 101)]]
+     [[1 :attr "hoge" 101]
+      [2 :attr "fuga" 101]
+      [3 :attr "piyo" 102]
+      [4 :attr "piyopiyo" 103]])
+;; => #{[1 :attr "hoge" 101]
+;;      [2 :attr "fuga" 101]}

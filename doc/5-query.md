@@ -286,6 +286,48 @@
     ;;      ["深川125" "プログラミングClojure"]
     ;;      ["ドラゴン" "Real World Haskell"]}
 
+## Where句(`:where`)
+
+- Where句にはDatomパターンか関数フォームを列挙
+  - Datomパターン ...`[?e ?a ?v ?t]`
+  - 関数フォーム ...`[(f ……)]`や`[(f ……) ?x]`
+- すべてを満たす変数の組み合わせを探す
+
+          ;; `:customer/*`属性を探すWhere句。
+          :where
+          [:db.part/db :db.install/attribute ?a]
+          [?a :db/ident ?an]
+          [(namespace ?an) ?ns]
+          [(= ?ns "customer")]
+
+  - 関数フォーム`[(namespace ?an) ?ns]`により、評価結果を`?an`へバインドする
+  - 関数フォーム`[(= ?ns "customer")]`により、評価結果が真になるような`?ns`を探す
+  - `clojure.core`の関数や`java.lang`なクラスのメソッドならnamespace指定なしでOK(それ以外も、namespaceを付ければ使用可)
+
+## DBスナップショットなしのクエリ
+
+- 実のところ、DBスナップショットなしでもクエリは使える
+
+          (d/q '[:find ?k ?v
+                 :where
+                 [(System/getProperties) [[?k ?v]]]
+                 [(.startsWith ^String ?k "java.vm")]])
+          ;; => #{["java.vm.version" "25.31-b07"]
+          ;;      ["java.vm.specification.version" "1.8"]
+          ;;      ["java.vm.vendor" "Oracle Corporation"]
+          ;;      ...}
+
+          (d/q '[:find ?e ?a ?v ?t
+                 :in [[?e ?a ?v ?t]]
+                 :where
+                 [(= ?t 101)]]
+               [[1 :attr "hoge" 101]
+                [2 :attr "fuga" 101]
+                [3 :attr "piyo" 102]
+                [4 :attr "piyopiyo" 103]])
+          ;; => #{[1 :attr "hoge" 101]
+          ;;      [2 :attr "fuga" 101]}
+
 ## What's next?
 - [コードを見る](../tutorial/query.clj)
 - [4. 属性とスキーマ](4-attr-and-schema.md)
