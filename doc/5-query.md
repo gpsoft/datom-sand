@@ -1,24 +1,27 @@
 # 5. クエリー
 
-## Datomicのクエリー
+## クエリー
 
+- DBスナップショットから様々な情報を取り出すための手段
 - 論理プログラミングを基礎にしたクエリー言語[Datalog](https://en.wikipedia.org/wiki/Datalog)を、Clojure文法に落とし込んだもの
+  - 情報を取り出す「方法」を記述するのではなく、欲しい情報の「仕様」を記述する
+  - クエリーを実行すると、データソース(DBスナップショット)の中から、仕様に適合するデータが抽出される
 - 書式
 
-          [:find ?a ?b             ;; SELECT句に相当。
-           :in $db1 $db2 ?c ?d     ;; 仮引数。
-           :where                  ;; WHERE句に相当。
-           data1
-           data2
-           data3
+          [:find ?a ?b             ;; SELECT文のSELECT句に相当。
+           :in $db1 $db2 ?c ?d     ;; prepared statementの仮引数に相当。
+           :where                  ;; SELECT文のWHERE句に相当。
+           spec1
+           spec2
+           spec3
            ...]
           ;; 他に:withもある(集約で使う)。
 
   - ベクタで記述
   - `?a`, `?b`, `?c` ...変数
-  - `$db1`, `$db2` ...DBのスナップショット
+  - `$db1`, `$db2` ...データソース(DBスナップショット)
     - DBスナップショットが1つだけなら、単に`$`とする
-  - `data1`, `data2`, `data3` ...Datomのパターン
+  - `spec1`, `spec2`, `spec3` ...欲しい情報の仕様
   - `$`以外の仮引数が無いなら`:in`は省略可能
 - 例
 
@@ -27,14 +30,16 @@
             '[:find [?bt ...]
               :in $ ?regex
               :where
-              [?e :book/title ?bt _]
-              [(re-matches ?regex ?bt)]])
+              [?e :book/title ?bt _]        ;; (1)
+              [(re-matches ?regex ?bt)]])   ;; (2)
 
-  - Where句(`:where`)で、Datom(EAVT)をパターンマッチさせる
-    - `[?e :book/title ?bt _]` ...Eが`?e`、Aが`:book/title`、Vが`?bt`、Tがdon't care
-    - `[?e :book/title ?bt]`と書いても良い
-  - あるいはS式で条件を記述
-    - `[(re-matches ?regex ?bt)]` ...`?bt`が正規表現`?regex`にマッチする
+  - `$`と`?regex`は、クエリー実行時の実引数にバインドされる
+  - `:where`には`[EAVT]`のパターンを記述(1)
+    - パターンにマッチするDatomの内容が変数にバインドされる
+    - `[?e :book/title ?bt _]` ...Aが`:book/title`なDatomがマッチし、そのEが`?e`へ、Vが`?bt`へバインドされる
+    - この例ではTはdon't careなので、`[?e :book/title ?bt]`と書いても良い
+  - S式により条件を記述することも可能(2)
+    - `[(re-matches ?regex ?bt)]` ...`?bt`が正規表現`?regex`にマッチすること
 
 - クエリーを実行するには、`d/q`関数か`d/query`関数を使用
 
@@ -215,10 +220,10 @@
 - クエリーへの入力をIn句の変数へバインドする、4つのパターン
   - スカラ
 
-            ;; クエリ式
+            ;; クエリー式
             :in $ ?a
 
-            ;; クエリ実行
+            ;; クエリー実行
             (d/q '[……]
               db
               "val")
@@ -228,10 +233,10 @@
 
   - 組
 
-            ;; クエリ式
+            ;; クエリー式
             :in $ [?a ?b]
 
-            ;; クエリ実行
+            ;; クエリー実行
             (d/q '[………]
               db
               ["vala" "valb"])
@@ -241,10 +246,10 @@
 
   - コレクション
 
-            ;; クエリ式
+            ;; クエリー式
             :in $ [?a ...]
 
-            ;; クエリ実行
+            ;; クエリー実行
             (d/q '[………]
               db
               ["vala1" "vala2" "vala3"])
@@ -254,10 +259,10 @@
 
   - 関係
 
-            ;; クエリ式
+            ;; クエリー式
             :in $ [[?a ?b]]
 
-            ;; クエリ実行
+            ;; クエリー実行
             (d/q '[………]
               db
               [["vala1" "valb1"]
@@ -304,9 +309,9 @@
   - 関数フォーム`[(= ?ns "customer")]`により、評価結果が真になるような`?ns`を探す
   - `clojure.core`の関数や`java.lang`なクラスのメソッドならnamespace指定なしでOK(それ以外も、namespaceを付ければ使用可)
 
-## DBスナップショットなしのクエリ
+## DBスナップショットなしのクエリー
 
-- 実のところ、DBスナップショットなしでもクエリは使える
+- 実のところ、DBスナップショットなしでもクエリーは使える
 
           (d/q '[:find ?k ?v
                  :where

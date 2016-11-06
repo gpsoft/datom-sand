@@ -194,7 +194,7 @@
        [(.endsWith ?bt "p")]]
      db)  ;; => ["Land of Lisp" "On Lisp"]
 
-;; DBスナップショットなしでクエリする
+;; DBスナップショットなしでクエリーする
 (d/q '[:find ?k ?v
        :where
        [(System/getProperties) [[?k ?v]]]
